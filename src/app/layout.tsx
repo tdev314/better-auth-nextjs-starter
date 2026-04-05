@@ -23,11 +23,16 @@ const primaryChroma = process.env.NEXT_PUBLIC_PRIMARY_CHROMA
 
 export const metadata: Metadata = {
     title: appName,
-    description:
-        `${appName} with Postgres, Drizzle, shadcn/ui and Tanstack Query`,
+    icons: {
+        apple: "/apple-touch-icon.png"
+    },
+    appleWebApp: {
+        capable: true,
+        statusBarStyle: "default",
+        title: appName
+    },
     openGraph: {
         title: appName,
-        description: `${appName} with Postgres, Drizzle, shadcn/ui and Tanstack Query`,
         siteName: appName
     }
 }
@@ -67,6 +72,11 @@ export default function RootLayout({
   document.addEventListener('touchstart', function(e){
     if (e.touches.length > 1) e.preventDefault();
   }, { passive: false });
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('/sw.js');
+    });
+  }
 })();
 `
                     }}

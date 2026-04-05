@@ -1,20 +1,27 @@
 import type { MetadataRoute } from "next"
 
 export default function manifest(): MetadataRoute.Manifest {
+    const appName = process.env.APPLICATION_NAME || "BETTER-AUTH. STARTER"
+
     return {
-        name: "Better Auth Next.js Starter",
-        short_name: "Better Auth Starter",
-        description:
-            "Better Auth Next.js Starter with Postgres, Drizzle, shadcn/ui and Tanstack Query",
+        name: appName,
+        short_name: appName,
         start_url: "/",
         display: "standalone",
-        background_color: "#fff",
-        theme_color: "#fff",
+        background_color: "#000000",
+        theme_color: "#000000",
         icons: [
             {
-                src: "/favicon.ico",
-                sizes: "any",
-                type: "image/x-icon"
+                src: "/icon-192.png",
+                sizes: "192x192",
+                type: "image/png",
+                purpose: "any"
+            },
+            {
+                src: "/icon-512.png",
+                sizes: "512x512",
+                type: "image/png",
+                purpose: "any"
             }
         ]
     }
