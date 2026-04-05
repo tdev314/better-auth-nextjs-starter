@@ -41,7 +41,8 @@ function ConsentForm() {
                 if (err || !data) {
                     setError("Could not load application details")
                 } else {
-                    setClientInfo({ name: data.name, icon: data.icon, uri: data.uri })
+                    const d = data as { name?: string; icon?: string; uri?: string }
+                    setClientInfo({ name: d.name, icon: d.icon, uri: d.uri })
                 }
             })
             .catch(() => setError("Could not load application details"))
