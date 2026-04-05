@@ -28,6 +28,11 @@
 	--color-warning-foreground: var(--warning-foreground);
 }
 
+[data-slot="card-footer"] a.underline,
+[data-slot="card-footer"] a.underline button {
+	text-decoration: none;
+}
+
 /** iOS Dynamic System Font Scaling */
 /* @supports (-webkit-touch-callout:none) {
 	html {

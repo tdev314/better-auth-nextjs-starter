@@ -23,17 +23,15 @@ export default async function AuthPage({
                 <p className="w-3xs text-center text-muted-foreground text-xs">
                     By continuing, you agree to our{" "}
                     <Link
-                        className="text-warning underline"
+                        className="text-primary"
                         href="/terms"
-                        target="_blank"
                     >
                         Terms of Service
                     </Link>{" "}
                     and{" "}
                     <Link
-                        className="text-warning underline"
+                        className="text-primary"
                         href="/privacy"
-                        target="_blank"
                     >
                         Privacy Policy
                     </Link>

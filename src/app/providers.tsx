@@ -27,6 +27,7 @@ export function Providers({ children }: { children: ReactNode }) {
                     router.refresh()
                 }}
                 Link={Link}
+                redirectTo="/account/settings"
             >
                 {children}
 
