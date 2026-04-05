@@ -1,6 +1,5 @@
 "use client"
 
-import { usePathname } from "next/navigation"
 import { usePostHog } from "posthog-js/react"
 import { useEffect, useRef } from "react"
 
@@ -9,16 +8,14 @@ import { authClient } from "@/lib/auth-client"
 export function PostHogIdentify() {
     const { data: session } = authClient.useSession()
     const posthog = usePostHog()
-    const pathname = usePathname()
-    const prevSessionRef = useRef<typeof session>(null)
+    const identifiedUserIdRef = useRef<string | null>(null)
 
     useEffect(() => {
         if (!posthog) return
 
-        const wasAuthenticated = !!prevSessionRef.current?.user
-        const isAuthenticated = !!session?.user
+        const userId = session?.user?.id ?? null
 
-        if (!wasAuthenticated && isAuthenticated) {
+        if (userId && userId !== identifiedUserIdRef.current) {
             const { user } = session
             posthog.identify(user.id, {
                 email: user.email,
@@ -26,7 +23,7 @@ export function PostHogIdentify() {
                 createdAt: user.createdAt,
             })
 
-            const event = pathname === "/auth/sign-up"
+            const event = window.location.pathname === "/auth/sign-up"
                 ? "user_signed_up"
                 : "user_signed_in"
 
@@ -34,15 +31,15 @@ export function PostHogIdentify() {
                 userId: user.id,
                 email: user.email,
             })
+            identifiedUserIdRef.current = userId
         }
 
-        if (wasAuthenticated && !isAuthenticated) {
+        if (!userId && identifiedUserIdRef.current) {
             posthog.capture("user_signed_out")
             posthog.reset()
+            identifiedUserIdRef.current = null
         }
-
-        prevSessionRef.current = session
-    }, [session, posthog, pathname])
+    }, [session, posthog])
 
     return null
 }
