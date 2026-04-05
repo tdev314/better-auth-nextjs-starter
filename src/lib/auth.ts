@@ -23,11 +23,12 @@ export const auth = betterAuth({
         openAPI(),
         jwt(),
         oauthProvider({
+            issuer: process.env.BETTER_AUTH_URL || process.env.OAUTH_ISSUER || "http://localhost:3000",
             loginPage: "/auth/sign-in",
             consentPage: "/consent",
             scopes: ["openid", "profile", "email", "offline_access"],
             validAudiences: [
-                process.env.BETTER_AUTH_URL || "http://localhost:3000",
+                process.env.BETTER_AUTH_URL || process.env.OAUTH_AUDIENCE || "http://localhost:3000",
             ],
             allowDynamicClientRegistration: true,
             allowUnauthenticatedClientRegistration: true,
