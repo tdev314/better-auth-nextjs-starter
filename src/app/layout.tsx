@@ -18,6 +18,8 @@ const geistMono = Geist_Mono({
 })
 
 const appName = process.env.APPLICATION_NAME || "BETTER-AUTH. STARTER"
+const primaryHue = process.env.NEXT_PUBLIC_PRIMARY_HUE
+const primaryChroma = process.env.NEXT_PUBLIC_PRIMARY_CHROMA
 
 export const metadata: Metadata = {
     title: appName,
@@ -42,7 +44,14 @@ export default function RootLayout({
     children: ReactNode
 }>) {
     return (
-        <html lang="en" suppressHydrationWarning>
+        <html
+            lang="en"
+            suppressHydrationWarning
+            style={{
+                ...(primaryHue && { "--primary-hue": primaryHue }),
+                ...(primaryChroma && { "--primary-chroma": primaryChroma }),
+            } as React.CSSProperties}
+        >
             <body
                 className={`${geistSans.variable} ${geistMono.variable} flex min-h-svh flex-col antialiased`}
             >
