@@ -27,18 +27,20 @@ export function Header() {
             </Link>
 
             <div className="flex items-center gap-2">
-                <Link
-                    href="https://github.com/daveyplate/better-auth-nextjs-starter"
-                    target="_blank"
-                >
-                    <Button
-                        variant="outline"
-                        size="icon"
-                        className="size-8 rounded-full"
+                {process.env.NEXT_PUBLIC_HIDE_GITHUB !== "true" && (
+                    <Link
+                        href="https://github.com/tdev314/better-auth-nextjs-starter"
+                        target="_blank"
                     >
-                        <GitHubIcon />
-                    </Button>
-                </Link>
+                        <Button
+                            variant="outline"
+                            size="icon"
+                            className="size-8 rounded-full"
+                        >
+                            <GitHubIcon />
+                        </Button>
+                    </Link>
+                )}
 
                 <ModeToggle />
                 <UserButton size="icon" />
