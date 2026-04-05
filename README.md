@@ -16,10 +16,10 @@ BETTER_AUTH_SECRET=""
 DATABASE_URL=""
 ```
 
-Then generate your schema and perform migrations with drizzle-kit.
+Then generate the Better Auth schema and run Drizzle migrations:
 
 ```bash
-npx @better-auth/cli generate
+npx auth generate -y
 npx drizzle-kit generate
 npx drizzle-kit migrate
 ```

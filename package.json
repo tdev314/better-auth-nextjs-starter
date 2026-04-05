@@ -9,7 +9,7 @@
         "lint": "biome check",
         "format": "biome format --write",
         "check-types": "tsc --noEmit",
-        "db:auth": "npx @better-auth/cli generate",
+        "db:auth": "npx auth generate -y",
         "db:gen": "npx drizzle-kit generate",
         "db:migrate": "npx drizzle-kit migrate",
         "db:sync": "pnpm db:auth && pnpm db:gen && pnpm db:migrate"
