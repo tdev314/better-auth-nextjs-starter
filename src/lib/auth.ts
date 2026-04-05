@@ -16,14 +16,22 @@ export const auth = betterAuth({
     emailAndPassword: {
         enabled: true
     },
+    disabledPaths: ["/token"],
     plugins: [
         dash(), 
         sentinel(),
         openAPI(),
         jwt(),
         oauthProvider({
-            loginPage: "/login",
+            loginPage: "/auth/sign-in",
             consentPage: "/consent",
+            scopes: ["openid", "profile", "email", "offline_access"],
+            validAudiences: [
+                process.env.BETTER_AUTH_URL || "http://localhost:3000",
+            ],
+            allowDynamicClientRegistration: true,
+            allowUnauthenticatedClientRegistration: true,
+            allowPublicClientPrelogin: true,
         }),
     ]
 })

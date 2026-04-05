@@ -1,5 +1,6 @@
 import { createAuthClient } from "better-auth/react"
 import { dashClient, sentinelClient } from "@better-auth/infra/client"
+import { oauthProviderClient } from "@better-auth/oauth-provider/client"
 import posthog from "@/lib/posthog"
 
 const authEventsByPath: Record<string, string> = {
@@ -14,6 +15,7 @@ export const authClient = createAuthClient({
     sentinelClient({
       autoSolveChallenge: true,
     }),
+    oauthProviderClient(),
   ],
   fetchOptions: {
     onSuccess: (ctx) => {
