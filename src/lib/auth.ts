@@ -18,9 +18,6 @@ export const auth = betterAuth({
     plugins: [
         dash(), 
         sentinel(),
-        openAPI({
-            enabled: true,
-            path: "/api/auth/docs",
-        }),
+        openAPI(),
     ]
 })
