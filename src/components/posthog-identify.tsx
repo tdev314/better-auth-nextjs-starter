@@ -15,7 +15,7 @@ export function PostHogIdentify() {
 
         const userId = session?.user?.id ?? null
 
-        if (userId && userId !== identifiedUserIdRef.current) {
+        if (userId && userId !== identifiedUserIdRef.current && session) {
             const { user } = session
             posthog.identify(user.id, {
                 email: user.email,
