@@ -34,6 +34,7 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
     initialScale: 1,
+    maximumScale: 1,
     viewportFit: "cover",
     width: "device-width"
 }
@@ -55,6 +56,21 @@ export default function RootLayout({
             <body
                 className={`${geistSans.variable} ${geistMono.variable} flex min-h-svh flex-col antialiased`}
             >
+                <script
+                    dangerouslySetInnerHTML={{
+                        __html: `
+(function(){
+  var mv = document.querySelector('meta[name=viewport]');
+  if (mv) mv.setAttribute('content','width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no');
+  document.addEventListener('gesturestart', function(e){ e.preventDefault(); });
+  document.addEventListener('gesturechange', function(e){ e.preventDefault(); });
+  document.addEventListener('touchstart', function(e){
+    if (e.touches.length > 1) e.preventDefault();
+  }, { passive: false });
+})();
+`
+                    }}
+                />
                 <Providers>
                     <Header />
 
