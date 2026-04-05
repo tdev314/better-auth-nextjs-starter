@@ -23,7 +23,7 @@ export function Header() {
                         fillRule="evenodd"
                     />
                 </svg>
-                BETTER-AUTH. STARTER
+                {process.env.APPLICATION_NAME || "BETTER-AUTH. STARTER"}
             </Link>
 
             <div className="flex items-center gap-2">

@@ -17,10 +17,17 @@ const geistMono = Geist_Mono({
     subsets: ["latin"]
 })
 
+const appName = process.env.APPLICATION_NAME || "BETTER-AUTH. STARTER"
+
 export const metadata: Metadata = {
-    title: "Better Auth Next.js Starter",
+    title: appName,
     description:
-        "Better Auth Next.js Starter with Postgres, Drizzle, shadcn/ui and Tanstack Query"
+        `${appName} with Postgres, Drizzle, shadcn/ui and Tanstack Query`,
+    openGraph: {
+        title: appName,
+        description: `${appName} with Postgres, Drizzle, shadcn/ui and Tanstack Query`,
+        siteName: appName
+    }
 }
 
 export const viewport: Viewport = {
