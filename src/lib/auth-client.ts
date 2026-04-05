@@ -1,11 +1,30 @@
 import { createAuthClient } from "better-auth/react"
 import { dashClient, sentinelClient } from "@better-auth/infra/client"
+import posthog from "@/lib/posthog"
+
+const authEventsByPath: Record<string, string> = {
+  "/change-email": "email_changed",
+  "/change-password": "password_changed",
+  "/update-user": "profile_updated",
+}
 
 export const authClient = createAuthClient({
   plugins: [
     dashClient(),
     sentinelClient({
-      autoSolveChallenge: true, // Automatically solve PoW challenges
+      autoSolveChallenge: true,
     }),
-  ]
+  ],
+  fetchOptions: {
+    onSuccess: (ctx) => {
+      if (typeof window === "undefined") return
+      const path = new URL(ctx.response.url).pathname
+      for (const [suffix, event] of Object.entries(authEventsByPath)) {
+        if (path.endsWith(suffix)) {
+          posthog.capture(event)
+          break
+        }
+      }
+    },
+  },
 })
