@@ -45,3 +45,7 @@ yarn-error.log*
 # workspace
 .turbo
 .vscode
+
+# macos
+.DS_Store
+._*
