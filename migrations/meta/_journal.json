@@ -15,6 +15,13 @@
       "when": 1775404826623,
       "tag": "0001_great_boom_boom",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1775411061496,
+      "tag": "0002_late_hannibal_king",
+      "breakpoints": true
     }
   ]
 }

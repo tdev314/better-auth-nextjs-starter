@@ -1,7 +1,8 @@
 import { betterAuth } from "better-auth"
 import { dash, sentinel } from "@better-auth/infra"
 import { drizzleAdapter } from "better-auth/adapters/drizzle"
-import { openAPI } from "better-auth/plugins"
+import { jwt, openAPI } from "better-auth/plugins"
+import { oauthProvider } from "@better-auth/oauth-provider"; 
 
 import { db } from "@/database/db"
 import * as schema from "@/database/schema"
@@ -19,5 +20,10 @@ export const auth = betterAuth({
         dash(), 
         sentinel(),
         openAPI(),
+        jwt(),
+        oauthProvider({
+            loginPage: "/login",
+            consentPage: "/consent",
+        }),
     ]
 })
