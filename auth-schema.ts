@@ -116,7 +116,7 @@ export const oauthClients = pgTable("oauth_clients", {
   responseTypes: text("response_types").array(),
   public: boolean("public"),
   type: text("type"),
-  requirePKCE: boolean("require_pkce").default(true),
+  requirePKCE: boolean("require_pkce"),
   referenceId: text("reference_id"),
   metadata: jsonb("metadata"),
 });
