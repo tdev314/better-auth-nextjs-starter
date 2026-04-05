@@ -20,11 +20,15 @@ const geistMono = Geist_Mono({
 const appName = process.env.APPLICATION_NAME || "BETTER-AUTH. STARTER"
 const primaryHue = process.env.NEXT_PUBLIC_PRIMARY_HUE
 const primaryChroma = process.env.NEXT_PUBLIC_PRIMARY_CHROMA
+const faviconUrl = process.env.FAVICON_URL
+const iconUrl = process.env.ICON_URL
+const ogImageUrl = process.env.OPENGRAPH_IMAGE_URL
 
 export const metadata: Metadata = {
     title: appName,
     icons: {
-        apple: "/apple-touch-icon.png"
+        icon: faviconUrl || "/icon.svg",
+        apple: iconUrl || "/apple-touch-icon.png"
     },
     appleWebApp: {
         capable: true,
@@ -33,7 +37,8 @@ export const metadata: Metadata = {
     },
     openGraph: {
         title: appName,
-        siteName: appName
+        siteName: appName,
+        ...(ogImageUrl && { images: [{ url: ogImageUrl }] })
     }
 }
 

@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next"
 
 export default function manifest(): MetadataRoute.Manifest {
     const appName = process.env.APPLICATION_NAME || "BETTER-AUTH. STARTER"
+    const iconUrl = process.env.ICON_URL
 
     return {
         name: appName,
@@ -10,19 +11,21 @@ export default function manifest(): MetadataRoute.Manifest {
         display: "standalone",
         background_color: "#000000",
         theme_color: "#000000",
-        icons: [
-            {
-                src: "/icon-192.png",
-                sizes: "192x192",
-                type: "image/png",
-                purpose: "any"
-            },
-            {
-                src: "/icon-512.png",
-                sizes: "512x512",
-                type: "image/png",
-                purpose: "any"
-            }
-        ]
+        icons: iconUrl
+            ? [{ src: iconUrl, sizes: "512x512", type: "image/png", purpose: "any" }]
+            : [
+                  {
+                      src: "/icon-192.png",
+                      sizes: "192x192",
+                      type: "image/png",
+                      purpose: "any"
+                  },
+                  {
+                      src: "/icon-512.png",
+                      sizes: "512x512",
+                      type: "image/png",
+                      purpose: "any"
+                  }
+              ]
     }
 }
