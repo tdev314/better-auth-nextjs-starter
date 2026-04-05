@@ -1,7 +1,7 @@
 import { betterAuth } from "better-auth"
 import { dash, sentinel } from "@better-auth/infra"
 import { drizzleAdapter } from "better-auth/adapters/drizzle"
-import { jwt, openAPI } from "better-auth/plugins"
+import { admin, jwt, openAPI } from "better-auth/plugins"
 import { oauthProvider } from "@better-auth/oauth-provider"; 
 
 import { db } from "@/database/db"
@@ -20,6 +20,7 @@ export const auth = betterAuth({
     },
     disabledPaths: ["/token"],
     plugins: [
+        admin(),
         dash(), 
         sentinel(),
         openAPI(),

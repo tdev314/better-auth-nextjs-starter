@@ -22,6 +22,13 @@
       "when": 1775411061496,
       "tag": "0002_late_hannibal_king",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1775421230641,
+      "tag": "0003_boring_wallow",
+      "breakpoints": true
     }
   ]
 }

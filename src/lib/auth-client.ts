@@ -1,4 +1,5 @@
 import { createAuthClient } from "better-auth/react"
+import { adminClient } from "better-auth/client/plugins"
 import { dashClient, sentinelClient } from "@better-auth/infra/client"
 import { oauthProviderClient } from "@better-auth/oauth-provider/client"
 import posthog from "@/lib/posthog"
@@ -11,6 +12,7 @@ const authEventsByPath: Record<string, string> = {
 
 export const authClient = createAuthClient({
   plugins: [
+    adminClient(),
     dashClient(),
     sentinelClient({
       autoSolveChallenge: true,
