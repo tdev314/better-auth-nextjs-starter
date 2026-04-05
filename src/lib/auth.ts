@@ -7,6 +7,8 @@ import { oauthProvider } from "@better-auth/oauth-provider";
 import { db } from "@/database/db"
 import * as schema from "@/database/schema"
 
+const ALLOWED_SCOPES = ["openid", "profile", "email", "offline_access"] as const
+
 export const auth = betterAuth({
     database: drizzleAdapter(db, {
         provider: "pg",
@@ -29,13 +31,22 @@ export const auth = betterAuth({
         oauthProvider({
             loginPage: "/auth/sign-in",
             consentPage: "/consent",
-            scopes: ["openid", "profile", "email", "offline_access"],
+            scopes: [...ALLOWED_SCOPES],
             validAudiences: [
                 process.env.BETTER_AUTH_URL || process.env.OAUTH_AUDIENCE || "http://localhost:3000",
             ],
             allowDynamicClientRegistration: true,
-            allowUnauthenticatedClientRegistration: true,
-            allowPublicClientPrelogin: true,
+            allowUnauthenticatedClientRegistration: false,
+            allowPublicClientPrelogin: false,
+            clientRegistrationAllowedScopes: [...ALLOWED_SCOPES],
+            rateLimit: {
+                register: { window: 60, max: 3 },
+                authorize: { window: 60, max: 20 },
+                token: { window: 60, max: 15 },
+                revoke: { window: 60, max: 10 },
+                introspect: { window: 60, max: 20 },
+                userinfo: { window: 60, max: 30 },
+            },
         }),
     ]
 })

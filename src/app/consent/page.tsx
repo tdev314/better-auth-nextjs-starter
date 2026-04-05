@@ -6,6 +6,8 @@ import { authClient } from "@/lib/auth-client"
 import { Button } from "@/components/ui/button"
 import { Shield, Globe, User, Mail, RefreshCw } from "lucide-react"
 
+const ALLOWED_SCOPES = new Set(["openid", "profile", "email", "offline_access"])
+
 const scopeDetails: Record<string, { label: string; description: string; icon: typeof Shield }> = {
     openid: { label: "OpenID", description: "Verify your identity", icon: Shield },
     profile: { label: "Profile", description: "Access your name and profile picture", icon: User },
@@ -17,8 +19,9 @@ function ConsentForm() {
     const searchParams = useSearchParams()
     const router = useRouter()
     const clientId = searchParams.get("client_id") ?? ""
-    const scope = searchParams.get("scope") ?? ""
-    const scopes = scope.split(" ").filter(Boolean)
+    const rawScope = searchParams.get("scope") ?? ""
+    const scopes = rawScope.split(" ").filter((s) => ALLOWED_SCOPES.has(s))
+    const scope = scopes.join(" ")
 
     const [clientInfo, setClientInfo] = useState<{
         name?: string
