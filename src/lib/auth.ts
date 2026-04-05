@@ -21,9 +21,12 @@ export const auth = betterAuth({
         dash(), 
         sentinel(),
         openAPI(),
-        jwt(),
+        jwt({
+            jwt: {
+                issuer: process.env.BETTER_AUTH_URL || process.env.OAUTH_ISSUER || "http://localhost:3000",
+            },
+        }),
         oauthProvider({
-            issuer: process.env.BETTER_AUTH_URL || process.env.OAUTH_ISSUER || "http://localhost:3000",
             loginPage: "/auth/sign-in",
             consentPage: "/consent",
             scopes: ["openid", "profile", "email", "offline_access"],
