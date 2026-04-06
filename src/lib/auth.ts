@@ -48,6 +48,23 @@ export const auth = betterAuth({
                 introspect: { window: 60, max: 20 },
                 userinfo: { window: 60, max: 30 },
             },
+            customAccessTokenClaims: async ({ user }) => (
+                user?.role ? { roles: [user.role] } : {}
+            ),
+            customIdTokenClaims: async ({ user }) => (
+                user.role ? { roles: [user.role] } : {}
+            ),
+            customUserInfoClaims: async ({ user }) => (
+                user.role ? { roles: [user.role] } : {}
+            ),
+            advertisedMetadata: {
+                claims_supported: [
+                    "sub", "iss", "aud", "exp", "iat", "sid", "scope", "azp",
+                    "email", "email_verified",
+                    "name", "picture", "given_name", "family_name",
+                    "roles",
+                ],
+            },
         }),
     ]
 })
