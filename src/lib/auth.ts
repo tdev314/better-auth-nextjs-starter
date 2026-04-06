@@ -16,7 +16,11 @@ export const auth = betterAuth({
         schema
     }),
     emailAndPassword: {
-        enabled: true
+        enabled: true,
+        sendResetPassword: async ({ user, url }, request) => {
+            // Replace with your email provider (e.g. Resend, SendGrid, Nodemailer)
+            console.log(`[Reset Password] ${user.email}: ${url}`)
+        },
     },
     disabledPaths: ["/token"],
     plugins: [
