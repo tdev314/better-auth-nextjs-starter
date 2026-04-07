@@ -1,4 +1,4 @@
-import { betterAuth } from "better-auth"
+import { betterAuth, type BetterAuthPlugin } from "better-auth"
 import { dash, sentinel } from "@better-auth/infra"
 import { drizzleAdapter } from "better-auth/adapters/drizzle"
 import { admin, jwt, openAPI } from "better-auth/plugins"
@@ -7,6 +7,9 @@ import { invite } from "better-invite"
 
 import { db } from "@/database/db"
 import * as schema from "@/database/schema"
+
+/** Bridges better-invite `$ERROR_CODES` to Better Auth’s `RawError` shape. See `docs/typescript-better-invite.md`. */
+type FixErrorCodes<T> = Omit<T, "$ERROR_CODES"> & Pick<BetterAuthPlugin, "$ERROR_CODES">
 
 const ALLOWED_SCOPES = ["openid", "profile", "email", "offline_access"] as const
 
@@ -30,7 +33,7 @@ export const auth = betterAuth({
             async sendUserInvitation({ email, role, url, token, newAccount }) {
                 console.log(`[Invite] ${email} (role: ${role}, new: ${newAccount}): ${url}`)
             },
-        }),
+        }) as unknown as FixErrorCodes<ReturnType<typeof invite>>,
         dash(), 
         sentinel(),
         openAPI(),

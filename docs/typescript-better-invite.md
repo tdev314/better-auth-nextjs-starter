@@ -1,0 +1,62 @@
+# TypeScript: `better-invite` and Better Auth plugin inference
+
+This project uses **better-invite** alongside [Better Auth](https://www.better-auth.com/) 1.6.x. A **type-level mismatch** between the two packages can break TypeScript’s inference for *all* Better Auth plugins—not only invites.
+
+## What goes wrong
+
+Better Auth (via `@better-auth/core`) types plugin error codes as:
+
+- `$ERROR_CODES?: Record<string, RawError>`
+- where `RawError` is `{ readonly code: K; message: string }` (see `@better-auth/core` plugin types).
+
+**better-invite@0.5.0** still declares `$ERROR_CODES` with **plain string** values (human-readable messages only). That does not satisfy `Record<string, RawError>`.
+
+When `invite()` / `inviteClient()` is included in the `plugins` array **without** a fix, TypeScript may fail to narrow `betterAuth({ ... })` and `createAuthClient({ ... })` correctly. Inference then falls back to a minimal API surface.
+
+## Symptoms you might see
+
+If the mismatch is not worked around, you can get errors such as:
+
+- `auth.api.adminCreateOAuthClient` / `getOAuthServerConfig` / `getOpenIdConfig` — property does not exist
+- `session.user.role` — `role` missing on user (admin plugin fields not inferred)
+- `authClient.oauth2` — missing on the client (oauth-provider client plugin not inferred)
+
+Runtime behavior is usually unchanged: the endpoints and plugins still work; **only types** are wrong.
+
+## What this repo does
+
+We apply a small **type shim** so the invite plugin is treated as compatible with `BetterAuthPlugin` for the purpose of `$ERROR_CODES`, while keeping the rest of the invite plugin’s types intact.
+
+### Server (`src/lib/auth.ts`)
+
+```ts
+type FixErrorCodes<T> = Omit<T, "$ERROR_CODES"> & Pick<BetterAuthPlugin, "$ERROR_CODES">
+
+invite({ ... }) as unknown as FixErrorCodes<ReturnType<typeof invite>>
+```
+
+### Client (`src/lib/auth-client.ts`)
+
+```ts
+inviteClient() as unknown as {
+  id: "invite"
+  $InferServerPlugin: FixErrorCodes<ReturnType<typeof invite>>
+}
+```
+
+`as unknown as` is required because TypeScript does not consider the invite plugin’s `$ERROR_CODES` structurally assignable to the fixed shape.
+
+## Runtime impact
+
+**None.** These are compile-time assertions only. Invite behavior, OAuth, admin routes, and sessions are unchanged.
+
+## Maintenance
+
+- After upgrading **better-auth** or **better-invite**, run `pnpm check-types` and `pnpm build`.
+- If **better-invite** updates its types so `$ERROR_CODES` matches `Record<string, RawError>`, you can try **removing** the `FixErrorCodes` casts and the `inviteClient()` assertion. If `tsc` stays clean, the shim is no longer needed.
+- If you **remove** the invite plugin from the app, delete these shims and the related imports.
+
+## Related
+
+- Existing JS patch for better-invite: `patches/better-invite@0.5.0.patch` (import path fix for `createAuthMiddleware`).
+- Admin panel and OAuth client APIs: [admin-panel.md](./admin-panel.md).

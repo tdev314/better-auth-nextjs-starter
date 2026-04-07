@@ -28,6 +28,11 @@ npx drizzle-kit migrate
 
 ☕️ [Buy me a coffee](https://buymeacoffee.com/daveycodez)
 
+## Documentation
+
+- [Admin panel & OAuth clients](docs/admin-panel.md)
+- [TypeScript: better-invite plugin inference](docs/typescript-better-invite.md)
+
 ## Features:
 
 [Better Auth](https://better-auth.com)

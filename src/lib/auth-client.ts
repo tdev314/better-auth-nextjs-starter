@@ -1,9 +1,13 @@
 import { createAuthClient } from "better-auth/react"
+import { type BetterAuthPlugin } from "better-auth"
 import { adminClient } from "better-auth/client/plugins"
 import { dashClient, sentinelClient } from "@better-auth/infra/client"
 import { oauthProviderClient } from "@better-auth/oauth-provider/client"
-import { inviteClient } from "better-invite"
+import { inviteClient, type invite } from "better-invite"
 import posthog from "@/lib/posthog"
+
+/** See `docs/typescript-better-invite.md` — must match server `invite()` shim. */
+type FixErrorCodes<T> = Omit<T, "$ERROR_CODES"> & Pick<BetterAuthPlugin, "$ERROR_CODES">
 
 const authEventsByPath: Record<string, string> = {
   "/change-email": "email_changed",
@@ -19,7 +23,10 @@ export const authClient = createAuthClient({
       autoSolveChallenge: true,
     }),
     oauthProviderClient(),
-    inviteClient(),
+    inviteClient() as unknown as {
+      id: "invite"
+      $InferServerPlugin: FixErrorCodes<ReturnType<typeof invite>>
+    },
   ],
   fetchOptions: {
     onSuccess: (ctx) => {
