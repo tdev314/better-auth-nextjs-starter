@@ -1,3 +1,5 @@
+"use server"
+
 /**
  * Creates a first-party trusted OAuth client.
  *

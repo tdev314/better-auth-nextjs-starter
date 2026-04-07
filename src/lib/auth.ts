@@ -77,6 +77,7 @@ export const auth = betterAuth({
             },
             silenceWarnings: {
                 openidConfig: true,
+                oauthConfig: true,
             },
         }),
     ]
