@@ -75,6 +75,9 @@ export const auth = betterAuth({
                     "roles",
                 ],
             },
+            silenceWarnings: {
+                openidConfig: true,
+            },
         }),
     ]
 })
