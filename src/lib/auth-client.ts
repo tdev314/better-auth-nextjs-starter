@@ -2,6 +2,7 @@ import { createAuthClient } from "better-auth/react"
 import { adminClient } from "better-auth/client/plugins"
 import { dashClient, sentinelClient } from "@better-auth/infra/client"
 import { oauthProviderClient } from "@better-auth/oauth-provider/client"
+import { inviteClient } from "better-invite"
 import posthog from "@/lib/posthog"
 
 const authEventsByPath: Record<string, string> = {
@@ -18,6 +19,7 @@ export const authClient = createAuthClient({
       autoSolveChallenge: true,
     }),
     oauthProviderClient(),
+    inviteClient(),
   ],
   fetchOptions: {
     onSuccess: (ctx) => {

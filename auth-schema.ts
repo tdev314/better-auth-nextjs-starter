@@ -4,6 +4,7 @@ import {
   text,
   timestamp,
   boolean,
+  integer,
   jsonb,
   index,
 } from "drizzle-orm/pg-core";
@@ -84,6 +85,37 @@ export const verifications = pgTable(
   },
   (table) => [index("verifications_identifier_idx").on(table.identifier)],
 );
+
+export const invites = pgTable("invites", {
+  id: text("id").primaryKey(),
+  token: text("token").unique(),
+  createdAt: timestamp("created_at"),
+  expiresAt: timestamp("expires_at").notNull(),
+  maxUses: integer("max_uses").notNull(),
+  createdByUserId: text("created_by_user_id").references(() => users.id, {
+    onDelete: "set null",
+  }),
+  redirectToAfterUpgrade: text("redirect_to_after_upgrade"),
+  shareInviterName: boolean("share_inviter_name").notNull(),
+  email: text("email"),
+  emails: text("emails").array(),
+  role: text("role").notNull(),
+  newAccount: boolean("new_account"),
+  status: text("status", {
+    enum: ["pending", "rejected", "canceled", "used"],
+  }).notNull(),
+});
+
+export const inviteUses = pgTable("invite_uses", {
+  id: text("id").primaryKey(),
+  inviteId: text("invite_id")
+    .notNull()
+    .references(() => invites.id, { onDelete: "set null" }),
+  usedAt: timestamp("used_at").notNull(),
+  usedByUserId: text("used_by_user_id").references(() => users.id, {
+    onDelete: "set null",
+  }),
+});
 
 export const jwkss = pgTable("jwkss", {
   id: text("id").primaryKey(),
@@ -180,6 +212,8 @@ export const oauthConsents = pgTable("oauth_consents", {
 export const usersRelations = relations(users, ({ many }) => ({
   sessions: many(sessions),
   accounts: many(accounts),
+  invites: many(invites),
+  inviteUses: many(inviteUses),
   oauthClients: many(oauthClients),
   oauthRefreshTokens: many(oauthRefreshTokens),
   oauthAccessTokens: many(oauthAccessTokens),
@@ -198,6 +232,25 @@ export const sessionsRelations = relations(sessions, ({ one, many }) => ({
 export const accountsRelations = relations(accounts, ({ one }) => ({
   users: one(users, {
     fields: [accounts.userId],
+    references: [users.id],
+  }),
+}));
+
+export const invitesRelations = relations(invites, ({ one, many }) => ({
+  users: one(users, {
+    fields: [invites.createdByUserId],
+    references: [users.id],
+  }),
+  inviteUses: many(inviteUses),
+}));
+
+export const inviteUsesRelations = relations(inviteUses, ({ one }) => ({
+  invites: one(invites, {
+    fields: [inviteUses.inviteId],
+    references: [invites.id],
+  }),
+  users: one(users, {
+    fields: [inviteUses.usedByUserId],
     references: [users.id],
   }),
 }));

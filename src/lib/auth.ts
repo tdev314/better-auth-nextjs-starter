@@ -3,6 +3,7 @@ import { dash, sentinel } from "@better-auth/infra"
 import { drizzleAdapter } from "better-auth/adapters/drizzle"
 import { admin, jwt, openAPI } from "better-auth/plugins"
 import { oauthProvider } from "@better-auth/oauth-provider"; 
+import { invite } from "better-invite"
 
 import { db } from "@/database/db"
 import * as schema from "@/database/schema"
@@ -25,6 +26,11 @@ export const auth = betterAuth({
     disabledPaths: ["/token"],
     plugins: [
         admin(),
+        invite({
+            async sendUserInvitation({ email, role, url, token, newAccount }) {
+                console.log(`[Invite] ${email} (role: ${role}, new: ${newAccount}): ${url}`)
+            },
+        }),
         dash(), 
         sentinel(),
         openAPI(),

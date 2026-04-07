@@ -29,6 +29,13 @@
       "when": 1775421230641,
       "tag": "0003_boring_wallow",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1775541621006,
+      "tag": "0004_little_joseph",
+      "breakpoints": true
     }
   ]
 }
