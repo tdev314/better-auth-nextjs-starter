@@ -14,6 +14,8 @@ type FixErrorCodes<T> = Omit<T, "$ERROR_CODES"> & Pick<BetterAuthPlugin, "$ERROR
 const ALLOWED_SCOPES = ["openid", "profile", "email", "offline_access"] as const
 
 export const auth = betterAuth({
+    // baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3000",
+    appName: process.env.APPLICATION_NAME || "Better Auth StarterKit",
     experimental: {
         joins: true,
     },
