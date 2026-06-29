@@ -1,7 +1,7 @@
 import { createAuthClient } from "better-auth/react"
 import { type BetterAuthPlugin } from "better-auth"
 import { passkeyClient } from "@better-auth/passkey/client"
-import { adminClient } from "better-auth/client/plugins"
+import { adminClient, twoFactorClient } from "better-auth/client/plugins"
 import { dashClient, sentinelClient } from "@better-auth/infra/client"
 import { oauthProviderClient } from "@better-auth/oauth-provider/client"
 import { inviteClient, type invite } from "better-invite"
@@ -17,6 +17,9 @@ const authEventsByPath: Record<string, string> = {
   "/passkey/verify-authentication": "passkey_sign_in",
   "/passkey/verify-registration": "passkey_added",
   "/passkey/delete-passkey": "passkey_deleted",
+  "/two-factor/verify-totp": "2fa_totp_verified",
+  "/two-factor/enable": "2fa_enabled",
+  "/two-factor/disable": "2fa_disabled",
 }
 
 export const authClient = createAuthClient({
@@ -29,6 +32,9 @@ export const authClient = createAuthClient({
       ...(process.env.NEXT_PUBLIC_BETTER_AUTH_IDENTIFY_URL && {
         identifyUrl: process.env.NEXT_PUBLIC_BETTER_AUTH_IDENTIFY_URL,
       }),
+    }),
+    twoFactorClient({
+      twoFactorPage: "/auth/two-factor",
     }),
     oauthProviderClient(),
     inviteClient() as unknown as {

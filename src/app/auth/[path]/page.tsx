@@ -1,6 +1,9 @@
 import { AuthView } from "@daveyplate/better-auth-ui"
 import { authViewPaths } from "@daveyplate/better-auth-ui/server"
 import Link from "next/link"
+import { Suspense } from "react"
+
+import { TotpSetupKey } from "@/components/totp-setup-key"
 
 export const dynamicParams = false
 
@@ -15,9 +18,36 @@ export default async function AuthPage({
 }) {
     const { path } = await params
 
+    const isTwoFactor = path === "two-factor"
+
     return (
         <main className="container flex grow flex-col items-center justify-center gap-4 self-center p-4 md:p-6">
-            <AuthView path={path} />
+            <AuthView
+                path={path}
+                classNames={isTwoFactor ? {
+                    form: {
+                        base: "justify-items-center",
+                        forgotPasswordLink: "hidden",
+                        qrCode: "mx-auto",
+                        otpInput: "h-12 w-12 text-lg",
+                        otpInputContainer: "justify-center",
+                    },
+                } : undefined}
+            />
+
+            {isTwoFactor && (
+                <div className="flex flex-col items-center gap-2">
+                    <Suspense>
+                        <TotpSetupKey />
+                    </Suspense>
+                    <Link
+                        className="text-muted-foreground text-xs hover:text-foreground hover:underline"
+                        href="/auth/recover-account"
+                    >
+                        Lost access to your authenticator?
+                    </Link>
+                </div>
+            )}
 
             {!["callback", "sign-out"].includes(path) && (
                 <p className="w-3xs text-center text-muted-foreground text-xs">

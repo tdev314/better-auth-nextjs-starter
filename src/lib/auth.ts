@@ -2,7 +2,7 @@ import { betterAuth, type BetterAuthPlugin } from "better-auth"
 import { dash, sentinel } from "@better-auth/infra"
 import { passkey, getAuthenticatorName } from "@better-auth/passkey"
 import { drizzleAdapter } from "better-auth/adapters/drizzle"
-import { admin, jwt, openAPI } from "better-auth/plugins"
+import { admin, jwt, openAPI, twoFactor } from "better-auth/plugins"
 import { oauthProvider } from "@better-auth/oauth-provider"; 
 import { invite } from "better-invite"
 
@@ -67,6 +67,7 @@ export const auth = betterAuth({
     disabledPaths: ["/token"],
     plugins: [
         admin(),
+        twoFactor(),
         passkey({
             rpName: process.env.APPLICATION_NAME || "Better Auth StarterKit",
             origin: authOrigin,

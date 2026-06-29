@@ -33,6 +33,7 @@ export function Providers({ children }: { children: ReactNode }) {
                     }}
                     Link={Link}
                     redirectTo="/account/settings"
+                    twoFactor={["totp"]}
                     passkey
                 >
                     <Suspense fallback={null}>
