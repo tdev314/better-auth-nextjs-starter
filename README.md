@@ -93,7 +93,7 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 This app needs the database migrated before the Next.js build. On Render, Railway, and similar hosts, set the **build command** to:
 
 ```bash
-pnpm db:sync && pnpm build
+pnpm db:migrate && pnpm build
 ```
 
 and the **start command** to `pnpm start`.
