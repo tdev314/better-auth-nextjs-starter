@@ -25,11 +25,17 @@ export const auth = betterAuth({
     experimental: {
         joins: true,
     },
+    advanced: {
+        ipAddress: {
+            ipAddressHeaders: ["x-forwarded-for", "x-real-ip"],
+        },
+    },
     session: {
         storeSessionInDatabase: true,
         cookieCache: {
             enabled: true,
             maxAge: 5 * 60,
+            strategy: "jwe",
         },
     },
     database: drizzleAdapter(db, {
