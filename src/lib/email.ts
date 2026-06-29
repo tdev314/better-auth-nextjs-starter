@@ -17,11 +17,22 @@ const transporter = smtpEnabled
     })
     : null
 
+if (smtpEnabled) {
+    console.log("[Email] SMTP enabled:", SMTP_HOST, "port", SMTP_PORT)
+} else {
+    console.log("[Email] SMTP not configured – emails will be logged to console")
+}
+
 export async function sendEmail(opts: { to: string; subject: string; text: string; html?: string }) {
     if (!transporter) {
         console.log(`[Email] To: ${opts.to} | Subject: ${opts.subject}`)
         console.log(`[Email] ${opts.text}`)
         return
     }
-    await transporter.sendMail({ from: SMTP_FROM, ...opts })
+    try {
+        const info = await transporter.sendMail({ from: SMTP_FROM, ...opts })
+        console.log(`[Email] Sent to ${opts.to} (messageId: ${info.messageId})`)
+    } catch (err) {
+        console.error(`[Email] Failed to send to ${opts.to}:`, err)
+    }
 }
